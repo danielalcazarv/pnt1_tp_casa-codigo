@@ -1,3 +1,6 @@
+using casa_codigo_cursos.Context;
+using Microsoft.EntityFrameworkCore;
+
 namespace casa_codigo_cursos
 {
     public class Program
@@ -5,6 +8,8 @@ namespace casa_codigo_cursos
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<CasaCodigoDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:CasaCodigoDBConnection"]));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
