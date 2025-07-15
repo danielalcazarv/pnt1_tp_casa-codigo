@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Página de Inicio";
+}
+
+<div class="p-5 mb-4 bg-light rounded-3 text-center">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Bienvenido a tu Plataforma de Cursos Online 🎓</h1>
+        <p class="fs-4 col-md-8 mx-auto">
+            Explora nuestro catálogo de cursos y talleres diseñados por expertos. Aprende nuevas habilidades a tu propio ritmo, desde cualquier lugar.
+        </p>
+        <a class="btn btn-primary btn-lg" asp-controller="Cursos" asp-action="Index">Ver todos los cursos</a>
+    </div>
+</div>
+
+<div class="container">
+    <h2 class="pb-2 border-bottom">Cursos Destacados</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
+    @*
+        @foreach (var curso in Model)
+        {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="@curso.ImagenUrl" class="card-img-top" alt="Imagen del curso @curso.Titulo" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">@curso.Titulo</h5>
+                    <p class="card-text text-muted">
+                        
+                        Categoría: @curso.Categoria.Nombre
+                    </p>
+                    <h4 class="card-text text-end">@curso.Precio.ToString("C")</h4>
+                </div>
+                <div class="card-footer bg-transparent border-top-0 text-center">
+                    <a asp-controller="Cursos" asp-action="Details" asp-route-id="@curso.CursoId" class="btn btn-outline-primary">
+                        Más Información
+                    </a>
+                </div>
+            </div>
+        </div>
+        }
+    *@
+    </div>
+</div>
+
