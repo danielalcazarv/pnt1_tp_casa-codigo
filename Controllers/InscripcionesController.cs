@@ -235,6 +235,28 @@ namespace casa_codigo_cursos.Controllers
             return View(inscripciones);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GestionarBaja(int inscripcionId)
+        {
+            var inscripcion = await _context.Inscripciones.FindAsync(inscripcionId);
+            if (inscripcion == null)
+            {
+                TempData["Error"] = "No se encontró la inscripción.";
+                return RedirectToAction("MisCursos");
+            }
+            
+            if ((DateTime.Now - inscripcion.FechaInscripcion).TotalDays >= 30)
+            {
+                TempData["Error"] = "No puedes darte de baja después de 30 días.";
+                return RedirectToAction("MisCursos");
+            }
+            _context.Inscripciones.Remove(inscripcion);
+            await _context.SaveChangesAsync();
+            TempData["Success"] = "Te diste de baja del curso exitosamente.";
+            return RedirectToAction("MisCursos");
+        }
+
         private bool InscripcionExists(int id)
         {
             return _context.Inscripciones.Any(e => e.InscripcionId == id);

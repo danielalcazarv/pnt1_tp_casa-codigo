@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using casa_codigo_cursos.Context;
 using casa_codigo_cursos.Models;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace casa_codigo_cursos.Controllers
 {
@@ -87,13 +88,8 @@ namespace casa_codigo_cursos.Controllers
 
 
         // GET: Usuarios/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null)
             {

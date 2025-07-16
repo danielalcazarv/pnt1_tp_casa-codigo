@@ -16,14 +16,14 @@ namespace casa_codigo_cursos.Controllers
             _context = context;
         }
 
-        // Login
+        
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // Procesa intento de login
+        
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel modelo)
         {
@@ -36,7 +36,7 @@ namespace casa_codigo_cursos.Controllers
             var usuario = await _context.Usuarios
                                         .FirstOrDefaultAsync(u => u.Email == modelo.Email);
 
-            // Verificamos si el usuario existe y si la contraseña es correcta
+            
             if (usuario == null || !BCrypt.Net.BCrypt.Verify(modelo.Password, usuario.Password))
             {
                 ModelState.AddModelError(string.Empty, "Usuario o Contraseña inválidos.");
@@ -57,7 +57,7 @@ namespace casa_codigo_cursos.Controllers
                 Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
 
-            // Redirigimos a la página principal
+            
             return RedirectToAction("Index", "Home");
         }
 

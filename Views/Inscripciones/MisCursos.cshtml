@@ -35,9 +35,20 @@ else
                                 <strong>Duración:</strong> @insc.Curso.Duracion minutos
                             </li>
                             <li class="list-group-item">
-                                <strong>Fecha Inscripción:</strong> @insc.FechaInscripcion
+                                <strong>Fecha Inscripción:</strong> @insc.FechaInscripcion.ToString("dd/MM/yyyy")
                             </li>
                         </ul>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+                        <button class="btn btn-primary" onclick="alert('Entraste al Curso!')">Ingresar al curso</button>
+                        @{
+                            var dias = (DateTime.Now - insc.FechaInscripcion).TotalDays;
+                            bool puedeDarseDeBaja = dias < 30;
+                        }
+                        <form asp-action="GestionarBaja" asp-controller="Inscripciones" method="post" style="display:inline">
+                            <input type="hidden" name="inscripcionId" value="@insc.InscripcionId" />
+                            <button type="submit" class="btn btn-danger" @(puedeDarseDeBaja ? "" : "disabled")>Gestionar Baja</button>
+                        </form>
                     </div>
                 </div>
             </div>
