@@ -15,7 +15,7 @@
 </div>
 
 <div class="container my-5">
-    <h1 class="text-center mb-4">Nuestros Cursos</h1>
+    <h1 class="text-center mb-4">Cursos Destacados</h1>
 
     <div class="row">
         @foreach (var curso in Model)
@@ -52,9 +52,6 @@
                         <div class="d-grid gap-2">
                             <a href="@Url.Action("Details", "Cursos", new { id = curso.CursoId })" class="btn btn-primary">
                                 Ver más detalles
-                            </a>
-                            <a href="#" class="btn btn-success" onclick="event.preventDefault(); alert('Función de inscripción no implementada.');">
-                                Inscribirse
                             </a>
                         </div>
                     </div>

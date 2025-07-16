@@ -19,9 +19,12 @@ namespace casa_codigo_cursos.Controllers
 
         public IActionResult Index()
         {
-            var primeros10Cursos = _context.Cursos.Take(9).ToList();
+            var cursosDestacados = _context.Cursos
+                                .OrderBy(x => Guid.NewGuid())
+                                .Take(6)
+                                .ToList();
 
-            return View(primeros10Cursos);
+            return View(cursosDestacados);
         }
 
         public IActionResult Privacy()
