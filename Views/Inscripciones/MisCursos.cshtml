@@ -1,0 +1,46 @@
+@model IEnumerable<casa_codigo_cursos.Models.Inscripcion>
+
+@{
+    ViewData["Title"] = "Mis Cursos";
+}
+
+<h1 class="mb-4">Mis Cursos</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No estás inscripto en ningún curso.</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var insc in Model)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="@insc.Curso.ImagenUrl" class="card-img-top" alt="Imagen del curso @insc.Curso.Titulo" style="height: 200px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@insc.Curso.Titulo</h5>
+                        <p class="card-text">
+                            @if (insc.Curso.Descripcion.Length > 100)
+                            {
+                                @(insc.Curso.Descripcion.Substring(0, 100) + "...")
+                            }
+                            else
+                            {
+                                @insc.Curso.Descripcion
+                            }
+                        </p>
+                        <ul class="list-group list-group-flush mt-auto">
+                            <li class="list-group-item">
+                                <strong>Duración:</strong> @insc.Curso.Duracion minutos
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Fecha Inscripción:</strong> @insc.FechaInscripcion
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+} 

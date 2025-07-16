@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using casa_codigo_cursos.Context;
 using casa_codigo_cursos.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace casa_codigo_cursos.Controllers
 {
@@ -57,10 +58,11 @@ namespace casa_codigo_cursos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InscripcionId,CursoId,UsuarioId,CodigoLetra")] Inscripcion inscripcion)
+        public async Task<IActionResult> Create([Bind("InscripcionId,CursoId,UsuarioID")] Inscripcion inscripcion)
         {
             if (ModelState.IsValid)
             {
+                inscripcion.FechaInscripcion = DateTime.Now;
                 _context.Add(inscripcion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -91,7 +93,7 @@ namespace casa_codigo_cursos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InscripcionId,CursoId,UsuarioId,CodigoLetra")] Inscripcion inscripcion)
+        public async Task<IActionResult> Edit(int id, [Bind("InscripcionId,CursoId,UsuarioID")] Inscripcion inscripcion)
         {
             if (id != inscripcion.InscripcionId)
             {
@@ -196,8 +198,7 @@ namespace casa_codigo_cursos.Controllers
             Inscripcion inscripcion = new Inscripcion();
             inscripcion.CursoId = cursoId;
             inscripcion.UsuarioID = userId;
-            inscripcion.CodigoLetra = null; //se asigna manualmente despues
-
+            inscripcion.FechaInscripcion = DateTime.Now;
 
 
             try
@@ -215,6 +216,23 @@ namespace casa_codigo_cursos.Controllers
             }
 
 
+        }
+
+        // Muestra los cursos en los que el usuario está inscripto
+        [Authorize]
+        public async Task<IActionResult> MisCursos()
+        {
+            var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+            {
+                TempData["Error"] = "No se pudo identificar al usuario autenticado.";
+                return RedirectToAction("Index", "Cursos");
+            }
+            var inscripciones = await _context.Inscripciones
+                .Include(i => i.Curso)
+                .Where(i => i.UsuarioID == userId)
+                .ToListAsync();
+            return View(inscripciones);
         }
 
         private bool InscripcionExists(int id)

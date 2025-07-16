@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System;
 
 namespace casa_codigo_cursos.Controllers
 {
@@ -32,6 +33,7 @@ namespace casa_codigo_cursos.Controllers
         public async Task<IActionResult> Agregar(int cursoId)
         {
             int usuarioId = GetUsuarioId();
+            // Busca el carrito del u, si no tiene uno lo crea
             var carrito = await _context.Carritos.Include(c => c.CarritoCursos)
                 .FirstOrDefaultAsync(c => c.UsuarioId == usuarioId);
             if (carrito == null)
@@ -40,7 +42,7 @@ namespace casa_codigo_cursos.Controllers
                 _context.Carritos.Add(carrito);
                 await _context.SaveChangesAsync();
             }
-            // Evitar duplicados
+            // Evita agregar el mismo curso dos veces
             if (!carrito.CarritoCursos.Any(cc => cc.CursoId == cursoId))
             {
                 carrito.CarritoCursos.Add(new CarritoCurso { CursoId = cursoId });
@@ -74,7 +76,7 @@ namespace casa_codigo_cursos.Controllers
             return RedirectToAction("Index");
         }
 
-        // Checkout: inscribir a todos los cursos y vaciar el carrito
+        // Procesa el checkout: inscribe al usuario en todos los cursos del carrito y lo vacía
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Checkout()
@@ -94,7 +96,7 @@ namespace casa_codigo_cursos.Controllers
                 bool yaInscripto = await _context.Inscripciones.AnyAsync(i => i.CursoId == cc.CursoId && i.UsuarioID == usuarioId);
                 if (!yaInscripto)
                 {
-                    _context.Inscripciones.Add(new Inscripcion { CursoId = cc.CursoId, UsuarioID = usuarioId });
+                    _context.Inscripciones.Add(new Inscripcion { CursoId = cc.CursoId, UsuarioID = usuarioId, FechaInscripcion = DateTime.UtcNow });
                 }
             }
             // Vaciar carrito

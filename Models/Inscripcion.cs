@@ -3,11 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace casa_codigo_cursos.Models
 {
-    public enum CodigoLetra
-    {
-        A, B, C, D, E
-    }
-
     public class Inscripcion
     {
         public int InscripcionId { get; set; }
@@ -18,8 +13,7 @@ namespace casa_codigo_cursos.Models
         [Required(ErrorMessage = "El alumno es obligatorio.")]
         public int UsuarioID { get; set; }
 
-        [EnumDataType(typeof(CodigoLetra), ErrorMessage = "Código de letra inválido.")]
-        public CodigoLetra? CodigoLetra { get; set; }
+        public DateTime FechaInscripcion { get; set; }
 
         public Curso Curso { get; set; }
 
