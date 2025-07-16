@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using casa_codigo_cursos.Context;
 
@@ -10,9 +11,11 @@ using casa_codigo_cursos.Context;
 namespace casa_codigo_cursos.Migrations
 {
     [DbContext(typeof(CasaCodigoDbContext))]
-    partial class CasaCodigoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250715221420_Modificaciones")]
+    partial class Modificaciones
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

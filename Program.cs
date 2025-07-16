@@ -1,4 +1,5 @@
 using casa_codigo_cursos.Context;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 namespace casa_codigo_cursos
@@ -8,6 +9,12 @@ namespace casa_codigo_cursos
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.LoginPath = "/Acceso/Login";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            });
 
             builder.Services.AddDbContext<CasaCodigoDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:CasaCodigoDBConnection"]));
 

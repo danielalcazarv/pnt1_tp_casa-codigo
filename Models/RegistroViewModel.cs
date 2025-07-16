@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace casa_codigo_cursos.Models
 {
-    [Index(nameof(Email), IsUnique = true)]
-    [Index(nameof(Dni), IsUnique = true)]
-    public class Usuario
+    public class RegistroViewModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -41,18 +39,5 @@ namespace casa_codigo_cursos.Models
         [Required(ErrorMessage = "El correo electrónico es obligatorio.")]
         [EmailAddress(ErrorMessage = "El formato del correo electrónico no es válido.")]
         public string Email { get; set; }
-
-        [Display(Name = "Nombre Completo")]
-        public string FullName
-        { 
-            get
-            { 
-                return Apellido + ", " + Nombre;
-            }
-        }
-
-        public ICollection<Inscripcion> Inscripciones { get; set; }
     }
 }
-
-

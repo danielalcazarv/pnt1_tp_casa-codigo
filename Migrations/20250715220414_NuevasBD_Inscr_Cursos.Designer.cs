@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using casa_codigo_cursos.Context;
 
@@ -10,9 +11,11 @@ using casa_codigo_cursos.Context;
 namespace casa_codigo_cursos.Migrations
 {
     [DbContext(typeof(CasaCodigoDbContext))]
-    partial class CasaCodigoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250715220414_NuevasBD_Inscr_Cursos")]
+    partial class NuevasBD_Inscr_Cursos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,14 +29,14 @@ namespace casa_codigo_cursos.Migrations
                     b.Property<int>("CursoId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImagenUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("Precio")
                         .HasColumnType("float");
 
                     b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("imagen")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -83,6 +86,10 @@ namespace casa_codigo_cursos.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ConfirmPassword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Dni")
                         .HasColumnType("int");
