@@ -48,7 +48,7 @@ namespace casa_codigo_cursos.Controllers
             {
                 new Claim(ClaimTypes.Name, usuario.Nombre),
                 new Claim(ClaimTypes.Email, usuario.Email),
-                // Podés agregar más información del usuario aquí
+                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()), 
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);

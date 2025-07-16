@@ -16,7 +16,7 @@ namespace casa_codigo_cursos.Models
         public int CursoId { get; set; }
 
         [Required(ErrorMessage = "El alumno es obligatorio.")]
-        public int AlumnoID { get; set; }
+        public int UsuarioID { get; set; }
 
         [EnumDataType(typeof(CodigoLetra), ErrorMessage = "Código de letra inválido.")]
         public CodigoLetra? CodigoLetra { get; set; }

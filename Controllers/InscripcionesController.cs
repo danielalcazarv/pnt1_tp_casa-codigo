@@ -57,7 +57,7 @@ namespace casa_codigo_cursos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InscripcionId,CursoId,AlumnoID,CodigoLetra")] Inscripcion inscripcion)
+        public async Task<IActionResult> Create([Bind("InscripcionId,CursoId,UsuarioId,CodigoLetra")] Inscripcion inscripcion)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace casa_codigo_cursos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InscripcionId,CursoId,AlumnoID,CodigoLetra")] Inscripcion inscripcion)
+        public async Task<IActionResult> Edit(int id, [Bind("InscripcionId,CursoId,UsuarioId,CodigoLetra")] Inscripcion inscripcion)
         {
             if (id != inscripcion.InscripcionId)
             {
@@ -154,6 +154,67 @@ namespace casa_codigo_cursos.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Inscribirse(int cursoId)
+        {
+            // Obtener el UsuarioId del usuario autenticado
+            var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+            {
+                TempData["Error"] = "No se pudo identificar al usuario autenticado.";
+                return RedirectToAction("Index", "Cursos");
+            }
+
+            // Buscar usuario por UsuarioId
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == userId);
+            if (usuario == null)
+            {
+                TempData["Error"] = "Usuario no encontrado.";
+                return RedirectToAction("Index", "Cursos");
+            }
+
+            // Verificar que el curso existe
+            var curso = await _context.Cursos.FindAsync(cursoId);
+            if (curso == null)
+            {
+                TempData["Error"] = "Curso no encontrado.";
+                return RedirectToAction("Index", "Cursos");
+            }
+
+            // Verificar que el usuario no esté ya inscripto en ese curso
+            var yaInscripto = await _context.Inscripciones.AnyAsync(i => i.CursoId == cursoId && i.UsuarioID == userId);
+            if (yaInscripto)
+            {
+                TempData["Error"] = "Ya estás inscripto en este curso.";
+                return RedirectToAction("Index", "Cursos");
+            }
+
+            // Crear inscripción
+            Inscripcion inscripcion = new Inscripcion();
+            inscripcion.CursoId = cursoId;
+            inscripcion.UsuarioID = userId;
+            inscripcion.CodigoLetra = null; //se asigna manualmente despues
+
+
+
+            try
+            {
+                _context.Inscripciones.Add(inscripcion);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Inscripción realizada con éxito.";
+                return RedirectToAction("Index", "Home");
+            }
+            catch (DbUpdateException ex)
+            {
+                TempData["Error"] = "Ocurrió un error al procesar tu inscripción. Inténtalo de nuevo.";
+                return RedirectToAction("Index", "Cursos");
+            }
+
+
         }
 
         private bool InscripcionExists(int id)
