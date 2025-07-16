@@ -1,0 +1,56 @@
+@model casa_codigo_cursos.Models.Carrito
+
+@{
+    ViewData["Title"] = "Mi Carrito";
+}
+
+<h1 class="mb-4">Mi Carrito</h1>
+
+@if (Model == null || Model.CarritoCursos == null || !Model.CarritoCursos.Any())
+{
+    <div class="alert alert-info">Tu carrito está vacío.</div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Duración</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.CarritoCursos)
+        {
+            <tr>
+                <td>
+                    <img src="@item.Curso.ImagenUrl" alt="Imagen del curso" style="width:100px; height:60px; object-fit:cover;" />
+                </td>
+                <td>@item.Curso.Titulo</td>
+                <td>@(item.Curso.Descripcion.Length > 60 ? item.Curso.Descripcion.Substring(0, 60) + "..." : item.Curso.Descripcion)</td>
+                <td>@item.Curso.Duracion minutos</td>
+                <td>$@item.Curso.Precio</td>
+                <td>
+                    <form asp-action="Quitar" method="post" style="display:inline">
+                        <input type="hidden" name="carritoCursoId" value="@item.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Quitar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-end"><strong>Total a abonar:</strong></td>
+                <td colspan="2"><strong>$@Model.CarritoCursos.Sum(x => x.Curso.Precio)</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+    <form asp-action="Checkout" method="post">
+        <button type="submit" class="btn btn-primary">Procesar Inscripción</button>
+    </form>
+} 

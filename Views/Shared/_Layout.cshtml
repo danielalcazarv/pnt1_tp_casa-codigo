@@ -30,6 +30,11 @@
                                 <span class="nav-link text-dark">Hola, @User.Identity.Name!</span>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Carrito" asp-action="Index">
+                                    🛒 Mi Carrito
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-danger-emphasis" asp-area="" asp-controller="Acceso" asp-action="Logout">Cerrar Sesión</a>
                             </li>
                         }

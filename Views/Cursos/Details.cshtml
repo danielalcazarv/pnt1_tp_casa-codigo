@@ -34,8 +34,11 @@
 </div>
 <div>
     <a class="btn btn-secondary" asp-action="Index">Ver Todos</a>
-    <form asp-controller="Inscripciones" asp-action="Inscribirse" method="post" style="display:inline">
-        <input type="hidden" name="cursoId" value="@Model.CursoId" />
-        <button type="submit" class="btn btn-primary">Inscribirse</button>
-    </form>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form asp-controller="Carrito" asp-action="Agregar" method="post" style="display:inline">
+            <input type="hidden" name="cursoId" value="@Model.CursoId" />
+            <button type="submit" class="btn btn-success">Agregar al carrito</button>
+        </form>
+    }
 </div>
