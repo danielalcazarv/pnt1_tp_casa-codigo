@@ -20,3 +20,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.logo {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: <weight>;
+    font-style: normal;
+}
